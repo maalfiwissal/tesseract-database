@@ -1,0 +1,42 @@
+<!--index.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Extraction and Database Interface</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h1 class="mb-4">Text Extraction and Database Interface</h1>
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="fileInput" name="file" accept="image/*" required>
+            <label class="custom-file-label" for="fileInput">Choose file</label>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Upload Image</button>
+    </form>
+    
+    <div id="selectedFilePath"></div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileInput = e.target;
+            const selectedFilePath = document.getElementById('selectedFilePath');
+
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                selectedFilePath.innerHTML = `Selected File: ${fileName}`;
+            } else {
+                selectedFilePath.innerHTML = '';
+            }
+        });
+    </script>
+
+    <!-- Add Bootstrap JS and Popper.js links -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!--home.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .header1 {
+            margin-top: 30px;
+            margin-left: 30px;
+        }
+        body {
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .custom-container {
+            width: 300px; /* Largeur du conteneur */
+            height: 235px; /* Hauteur du conteneur */
+            padding: 20px;
+            border: 2px solid #ccc; /* Bordure avec couleur grise */
+            border-radius: 10px; /* Coins arrondis */
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header1">
+        <h2>photoIdentify: scanningTool</h2>
+    </div>
+    <div class="container custom-container">
+        <form action="/home" method="post">
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur :</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+        </form>
+    </div>
+</body>
+</html>
