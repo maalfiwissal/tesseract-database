@@ -31,20 +31,26 @@ def extract_text(image_path):
 # Function to parse relevant information from the OCR result
 def parse_information(text):
     # Example parsing logic; adjust based on the actual structure of your OCR result
-    match_name = re.search(r'Prénom\(s\): (\w+)', text)
-    name = match_name.group(1) if match_name else None
+    match_name = re.search(r'(Prénom\(s\): |Prénom{s\): )(\w+)', text)
+    name = match_name.group(2) if match_name else None
 
-    match_gender = re.search(r'Sexe :(\w+)', text)
-    gender = match_gender.group(1) if match_gender else None
+    match_gender = re.search(r'(Sexe :|Sexe: )(\w+)', text)
+    gender = match_gender.group(2) if match_gender else None
 
-    match_birthdate = re.search(r'née} le: (.+)', text)
-    birthdate = match_birthdate.group(1) if match_birthdate else None
+    #match_birthdate = re.search(r'née} le: (.+)', text)
+    #birthdate = match_birthdate.group(1) if match_birthdate else None
+
+    match_birthdate = re.search(r'(née} le:|Né\(e\) le:|Néle\)|Né\(e\) le =) (.+)', text)
+    birthdate = match_birthdate.group(2) if match_birthdate else None
 
     match_place_of_birth = re.search(r'a: (.+)', text)
     place_of_birth = match_place_of_birth.group(1) if match_place_of_birth else None
 
-    match_height = re.search(r'Taille : (.+)', text)
-    height = match_height.group(1) if match_height else None
+    #match_height = re.search(r'Taille : (.+)', text)
+    #height = match_height.group(1) if match_height else None
+
+    match_height = re.search(r'(Taille :|Taille:)(.+)', text)
+    height = match_height.group(2) if match_height else None
 
     # Provide default values for fields that may be None
     name = name or 'Unknown'
@@ -95,6 +101,42 @@ def result():
             return str(e)
 
     return render_template('result.html', text=None, user_data=None)
+
+@app.route('/view_data', methods=['GET', 'POST'])
+def view_data():
+    if request.method == 'POST':
+        # If a search term is provided, filter the data based on the name
+        search_name = request.form.get('search_name')
+        if search_name:
+            query = "SELECT * FROM table1 WHERE name LIKE %s"
+            cursor.execute(query, ('%' + search_name + '%',))
+            rows = cursor.fetchall()
+        else:
+            # If no search term, retrieve all rows
+            query = "SELECT * FROM table1"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+
+    else:
+        # If it's a GET request, retrieve all rows
+        query = "SELECT * FROM table1"
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+    return render_template('view_data.html', rows=rows)
+def delete_row(row_name):
+    query = "DELETE FROM table1 WHERE name = %s"
+    cursor.execute(query, (row_name,))
+    conn.commit()
+
+@app.route('/delete_row', methods=['POST'])
+def delete_row_view():
+    if request.method == 'POST':
+        row_name = request.form.get('row_name')
+        if row_name:
+            delete_row(row_name)
+    return redirect(url_for('view_data'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

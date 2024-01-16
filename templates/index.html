@@ -16,20 +16,38 @@
             <label class="custom-file-label" for="fileInput">Choose file</label>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Upload Image</button>
+        <a href="{{ url_for('view_data') }}" class="btn btn-secondary mt-2">View Data</a>
     </form>
     
     <div id="selectedFilePath"></div>
+
+    <div id="imagePreview" class="mt-4">
+        <img id="preview" class="img-fluid" alt="Image Preview">
+    </div>
 
     <script>
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const fileInput = e.target;
             const selectedFilePath = document.getElementById('selectedFilePath');
+            const imagePreview = document.getElementById('imagePreview');
+            const preview = document.getElementById('preview');
 
             if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
+                const file = fileInput.files[0];
+                const fileName = file.name;
                 selectedFilePath.innerHTML = `Selected File: ${fileName}`;
+
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                imagePreview.style.display = 'block';
             } else {
                 selectedFilePath.innerHTML = '';
+                imagePreview.style.display = 'none';
             }
         });
     </script>
